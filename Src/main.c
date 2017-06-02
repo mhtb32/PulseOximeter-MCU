@@ -39,7 +39,6 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "adc.h"
-#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -58,7 +57,7 @@ uint32_t ADC_Buffer[32];
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void UU_PutNumber(UART_HandleTypeDef* , uint32_t );
+
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
@@ -93,7 +92,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_TIM1_Init();
   MX_UART4_Init();
   MX_ADC1_Init();
