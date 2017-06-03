@@ -33,7 +33,6 @@ ppg_f4\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h
 ppg_f4\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 ppg_f4\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 ppg_f4\main.o: ../Inc/adc.h
-ppg_f4\main.o: ../Inc/dma.h
 ppg_f4\main.o: ../Inc/tim.h
 ppg_f4\main.o: ../Inc/usart.h
 ppg_f4\main.o: ../Inc/gpio.h

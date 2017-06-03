@@ -48,11 +48,10 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-
+__IO uint16_t uhADC1ConvertedValue = 0;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 uint8_t UART_Buffer[8] = "ADStart\n";
-uint32_t ADC_Buffer[32];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -100,7 +99,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
-	HAL_ADC_Start_DMA(&hadc1, ADC_Buffer, 32);
 	//Send a sentence to check being alive!
 	HAL_UART_Transmit(&huart4, UART_Buffer, sizeof(UART_Buffer), 100);
   /* USER CODE END 2 */
@@ -112,15 +110,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	for(size_t i = 0; i<4; i++ )
-	{
-		for(size_t j = 0; j<8; j++)
-		{
-			UART_Buffer[j] = ADC_Buffer[j+8*i]; 
-		}
-		UU_PutNumber(&huart4, ADC_Buffer);
-	}
-	HAL_Delay(100);
+
   }
   /* USER CODE END 3 */
 
@@ -182,21 +172,9 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void UU_PutNumber(UART_HandleTypeDef* USARTx, uint32_t x)
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1)
 {
-  char value[10]; //a temp array to hold results of conversion
-  int i = 0; //loop index
-  
-  do
-  {
-    value[i++] = (char)(x % 10) + '0'; //convert integer to character
-    x /= 10;
-  } while(x);
-  
-  while(i) //send data
-  {
-    HAL_UART_Transmit(USARTx, (uint8_t*)value[--i], sizeof((uint8_t*)value[--i]), 100);
-  }
+	uhADC1ConvertedValue = HAL_ADC_GetValue(hadc1);
 }
 /* USER CODE END 4 */
 
