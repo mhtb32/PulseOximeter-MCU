@@ -54,6 +54,7 @@
 __IO uint16_t uhADC1ConvertedValue;
 char* adcValueChar;
 uint8_t UART_Buffer[8] = "ADStart\n";
+uint8_t UART_Buffer2[8] = "ADConvt\n";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,7 +62,7 @@ void SystemClock_Config(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
-
+void send_number12(UART_HandleTypeDef*, uint16_t, uint32_t);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -124,6 +125,8 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+		send_number12(&huart4, uhADC1ConvertedValue, 100);
+		HAL_Delay(250);
   }
   /* USER CODE END 3 */
 
@@ -190,17 +193,19 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1)
 	uhADC1ConvertedValue = HAL_ADC_GetValue(hadc1);
 }
 
-void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value)
+void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value, uint32_t timeout)
 {
-	uint8_t buffer[12];
+	uint8_t buffer[4];
 	int i=0;
 	
 	do
 	{
-		buffer[i++] = (uint8_t)(num_value % 10) + '0';
+		buffer[i++] = (uint8_t)(num_value % 10) + 48;
 		num_value /= 10;
 	}
 	while(num_value);
+	
+	HAL_UART_Transmit(UARTx, buffer, sizeof(buffer), timeout);
 }
 /* USER CODE END 4 */
 
