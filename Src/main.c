@@ -105,8 +105,8 @@ int main(void)
 	
 	if(HAL_ADC_Start_IT(&hadc1) != HAL_OK)
 	{
-			/* Start Conversation Error */
-			Error_Handler();
+		/* Start Conversation Error */
+		Error_Handler();
 	}
 	if(HAL_TIM_Base_Start(&htim2) != HAL_OK)
   {
@@ -188,6 +188,19 @@ void SystemClock_Config(void)
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1)
 {
 	uhADC1ConvertedValue = HAL_ADC_GetValue(hadc1);
+}
+
+void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value)
+{
+	uint8_t buffer[12];
+	int i=0;
+	
+	do
+	{
+		buffer[i++] = (uint8_t)(num_value % 10) + '0';
+		num_value /= 10;
+	}
+	while(num_value);
 }
 /* USER CODE END 4 */
 
