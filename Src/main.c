@@ -110,10 +110,10 @@ int main(void)
 		Error_Handler();
 	}
 	if(HAL_TIM_Base_Start(&htim2) != HAL_OK)
-  {
-    /* Counter Enable Error */
-    Error_Handler();
-  }
+	{
+		/* Counter Enable Error */
+		Error_Handler();
+	}
 	//Send a sentence to check being alive!
 	HAL_UART_Transmit(&huart4, UART_Buffer, sizeof(UART_Buffer), 100);
   /* USER CODE END 2 */
