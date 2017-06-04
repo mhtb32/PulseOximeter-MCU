@@ -46,6 +46,9 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define LD_RED_Pin GPIO_PIN_14
+#define LD_RED_GPIO_Port GPIOD
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

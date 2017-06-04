@@ -48,9 +48,11 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-__IO uint16_t uhADC1ConvertedValue = 0;
+
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+__IO uint16_t uhADC1ConvertedValue;
+char* adcValueChar;
 uint8_t UART_Buffer[8] = "ADStart\n";
 /* USER CODE END PV */
 
@@ -97,8 +99,20 @@ int main(void)
   MX_TIM2_Init();
 
   /* USER CODE BEGIN 2 */
+	//Starting two PWMs
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+	
+	if(HAL_ADC_Start_IT(&hadc1) != HAL_OK)
+	{
+			/* Start Conversation Error */
+			Error_Handler();
+	}
+	if(HAL_TIM_Base_Start(&htim2) != HAL_OK)
+  {
+    /* Counter Enable Error */
+    Error_Handler();
+  }
 	//Send a sentence to check being alive!
 	HAL_UART_Transmit(&huart4, UART_Buffer, sizeof(UART_Buffer), 100);
   /* USER CODE END 2 */
@@ -110,7 +124,6 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-
   }
   /* USER CODE END 3 */
 
@@ -189,6 +202,8 @@ void _Error_Handler(char * file, int line)
   /* User can add his own implementation to report the HAL error return state */
   while(1) 
   {
+		HAL_GPIO_TogglePin(LD_RED_GPIO_Port, LD_RED_Pin);
+		HAL_Delay(250);
   }
   /* USER CODE END Error_Handler_Debug */ 
 }
