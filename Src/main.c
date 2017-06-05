@@ -51,10 +51,11 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-__IO uint16_t uhADC1ConvertedValue;
+__IO uint16_t uhADC1ConvertedValue[2];
 char* adcValueChar;
 uint8_t UART_Buffer[8] = "ADStart\n";
-uint8_t UART_Buffer2[8] = "ADConvt\n";
+uint8_t UART_Buffer2[1] = "\n";
+int i = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,8 +97,8 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM1_Init();
   MX_UART4_Init();
-  MX_ADC1_Init();
   MX_TIM2_Init();
+  MX_ADC1_Init();
 
   /* USER CODE BEGIN 2 */
 	//Starting two PWMs
@@ -125,8 +126,11 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-		send_number12(&huart4, uhADC1ConvertedValue, 100);
-		HAL_Delay(250);
+		send_number12(&huart4, uhADC1ConvertedValue[0], 100);
+		HAL_UART_Transmit(&huart4, UART_Buffer2, 1, 100);
+		send_number12(&huart4, uhADC1ConvertedValue[1], 100);
+		HAL_UART_Transmit(&huart4, UART_Buffer2, 1, 100);
+		HAL_Delay(100);
   }
   /* USER CODE END 3 */
 
@@ -190,7 +194,12 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1)
 {
-	uhADC1ConvertedValue = HAL_ADC_GetValue(hadc1);
+	if(i==2)
+	{
+		i = 0;
+	}
+	uhADC1ConvertedValue[i] = HAL_ADC_GetValue(hadc1);
+	i++;
 }
 
 void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value, uint32_t timeout)
