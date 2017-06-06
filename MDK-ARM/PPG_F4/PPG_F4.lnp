@@ -7,6 +7,7 @@
 "ppg_f4\stm32f4xx_hal_msp.o"
 "ppg_f4\usart.o"
 "ppg_f4\adc.o"
+"ppg_f4\dma.o"
 "ppg_f4\stm32f4xx_hal_rcc.o"
 "ppg_f4\stm32f4xx_hal_pwr_ex.o"
 "ppg_f4\stm32f4xx_hal_pwr.o"

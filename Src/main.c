@@ -39,6 +39,7 @@
 #include "main.h"
 #include "stm32f4xx_hal.h"
 #include "adc.h"
+#include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -52,8 +53,6 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 __IO uint16_t uhADC1ConvertedValue[2];
-int i = 0;
-char* adcValueChar;
 uint8_t UART_Buffer[8] = "ADStart\n";
 uint8_t UART_Buffer2[1] = "\n";
 uint8_t UART_Buffer3[11] = "CHANNEL 1: ";
@@ -97,6 +96,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM1_Init();
   MX_UART4_Init();
   MX_TIM2_Init();
@@ -107,7 +107,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	
-	if(HAL_ADC_Start_IT(&hadc1) != HAL_OK)
+	if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)uhADC1ConvertedValue, 2) != HAL_OK)
 	{
 		/* Start Conversation Error */
 		Error_Handler();
@@ -134,7 +134,7 @@ int main(void)
 		HAL_UART_Transmit(&huart4, UART_Buffer4, sizeof(UART_Buffer4), 100);
 		send_number12(&huart4, uhADC1ConvertedValue[1], 100);
 		HAL_UART_Transmit(&huart4, UART_Buffer2, sizeof(UART_Buffer2), 100);
-		HAL_Delay(250);
+		HAL_Delay(200);
   }
   /* USER CODE END 3 */
 
@@ -196,15 +196,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1)
-{
-	if(i==2)
-	{
-		i = 0;
-	}
-	uhADC1ConvertedValue[i] = HAL_ADC_GetValue(hadc1);
-	i += 1;
-}
+
 /**
   * @brief  This function converts integer to printable string
 	* @param  UARTx : pointer to UART handle typedef
@@ -219,10 +211,11 @@ void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value, uint32_t timeo
 	
 	do
 	{
-		buffer[i++] = (uint8_t)(num_value % 10) + 48;
+		buffer[3 - i++] = (uint8_t)(num_value % 10) + 48;
 		num_value /= 10;
 	}
 	while(num_value);
+	
 	
 	HAL_UART_Transmit(UARTx, buffer, sizeof(buffer), timeout);
 }
