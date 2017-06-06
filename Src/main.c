@@ -52,10 +52,12 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 __IO uint16_t uhADC1ConvertedValue[2];
+int i = 0;
 char* adcValueChar;
 uint8_t UART_Buffer[8] = "ADStart\n";
 uint8_t UART_Buffer2[1] = "\n";
-int i = 0;
+uint8_t UART_Buffer3[11] = "CHANNEL 1: ";
+uint8_t UART_Buffer4[11] = "CHANNEL 2: ";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -126,11 +128,13 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+		HAL_UART_Transmit(&huart4, UART_Buffer3, sizeof(UART_Buffer3), 100);
 		send_number12(&huart4, uhADC1ConvertedValue[0], 100);
-		HAL_UART_Transmit(&huart4, UART_Buffer2, 1, 100);
+		HAL_UART_Transmit(&huart4, UART_Buffer2, sizeof(UART_Buffer2), 100);
+		HAL_UART_Transmit(&huart4, UART_Buffer4, sizeof(UART_Buffer4), 100);
 		send_number12(&huart4, uhADC1ConvertedValue[1], 100);
-		HAL_UART_Transmit(&huart4, UART_Buffer2, 1, 100);
-		HAL_Delay(100);
+		HAL_UART_Transmit(&huart4, UART_Buffer2, sizeof(UART_Buffer2), 100);
+		HAL_Delay(250);
   }
   /* USER CODE END 3 */
 
@@ -199,9 +203,15 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1)
 		i = 0;
 	}
 	uhADC1ConvertedValue[i] = HAL_ADC_GetValue(hadc1);
-	i++;
+	i += 1;
 }
-
+/**
+  * @brief  This function converts integer to printable string
+	* @param  UARTx : pointer to UART handle typedef
+	*	@paran	num_value : integer value which is to be converted
+	* @param timout : timout value needed for sending over UART
+  * @retval None
+  */
 void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value, uint32_t timeout)
 {
 	uint8_t buffer[4];
