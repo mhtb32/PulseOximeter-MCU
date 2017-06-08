@@ -3,4 +3,4 @@ This is microcontroller software of our pulse oximeter device being developed fo
 # Contributers
 * [Mohammad Hossein Tavakoli Bina](https://github.com/mhtb32)
 * [Mohammad Ebrahimi](https://github.com/Ebik95)
-* [Hamidreza Ehsani Chimeh](https://github.com/hrehsani) :wolf:
+* [Hamidreza Ehsani Chimeh](https://github.com/hrehsani) :dog2:
