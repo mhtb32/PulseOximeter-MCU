@@ -46,8 +46,14 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define LD_Green_Pin GPIO_PIN_12
+#define LD_Green_GPIO_Port GPIOD
+#define LD_Orange_Pin GPIO_PIN_13
+#define LD_Orange_GPIO_Port GPIOD
 #define LD_RED_Pin GPIO_PIN_14
 #define LD_RED_GPIO_Port GPIOD
+#define LD_Blue_Pin GPIO_PIN_15
+#define LD_Blue_GPIO_Port GPIOD
 
 /* USER CODE BEGIN Private defines */
 

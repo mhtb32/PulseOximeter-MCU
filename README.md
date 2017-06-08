@@ -3,4 +3,4 @@ This is microcontroller firmware of our pulse oximeter device being developed fo
 # Contributers
 * [Mohammad Hossein Tavakoli Bina](https://github.com/mhtb32)
 * [Mohammad Ebrahimi](https://github.com/Ebik95)
-* [Hamid Reza Ehsani Chime](https://github.com/hrehsani)
+* [Hamidreza Ehsani Chimeh](https://github.com/hrehsani)

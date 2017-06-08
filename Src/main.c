@@ -52,11 +52,9 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-__IO uint16_t uhADC1ConvertedValue[2];
-uint8_t UART_Buffer[8] = "ADStart\n";
-uint8_t UART_Buffer2[1] = "\n";
-uint8_t UART_Buffer3[11] = "CHANNEL 1: ";
-uint8_t UART_Buffer4[11] = "CHANNEL 2: ";
+__IO uint16_t uhADC1ConvertedValue[4000];
+uint8_t UART_Buffer2[1] = ",";
+uint8_t UART_Buffer3[1] = "\n";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,6 +63,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 void send_number12(UART_HandleTypeDef*, uint16_t, uint32_t);
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -107,7 +106,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	
-	if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)uhADC1ConvertedValue, 2) != HAL_OK)
+	if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)uhADC1ConvertedValue, 4000) != HAL_OK)
 	{
 		/* Start Conversation Error */
 		Error_Handler();
@@ -117,8 +116,6 @@ int main(void)
 		/* Counter Enable Error */
 		Error_Handler();
 	}
-	//Send a sentence to check being alive!
-	HAL_UART_Transmit(&huart4, UART_Buffer, sizeof(UART_Buffer), 100);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,13 +125,7 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-		HAL_UART_Transmit(&huart4, UART_Buffer3, sizeof(UART_Buffer3), 100);
-		send_number12(&huart4, uhADC1ConvertedValue[0], 100);
-		HAL_UART_Transmit(&huart4, UART_Buffer2, sizeof(UART_Buffer2), 100);
-		HAL_UART_Transmit(&huart4, UART_Buffer4, sizeof(UART_Buffer4), 100);
-		send_number12(&huart4, uhADC1ConvertedValue[1], 100);
-		HAL_UART_Transmit(&huart4, UART_Buffer2, sizeof(UART_Buffer2), 100);
-		HAL_Delay(200);
+		
   }
   /* USER CODE END 3 */
 
@@ -206,7 +197,7 @@ void SystemClock_Config(void)
   */
 void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value, uint32_t timeout)
 {
-	uint8_t buffer[4];
+	uint8_t buffer[4] = "0000";
 	int i=0;
 	
 	do
@@ -218,6 +209,21 @@ void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value, uint32_t timeo
 	
 	
 	HAL_UART_Transmit(UARTx, buffer, sizeof(buffer), timeout);
+}
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
+{
+	for(int i=0 ; i<4000 ; i++)
+	{
+		send_number12(&huart4, uhADC1ConvertedValue[i], 250);
+		if(i%2 == 1)
+		{
+			HAL_UART_Transmit(&huart4, UART_Buffer3, sizeof(UART_Buffer3),100);
+		}
+		else
+		{
+			HAL_UART_Transmit(&huart4, UART_Buffer2, sizeof(UART_Buffer2),100);
+		}
+	}
 }
 /* USER CODE END 4 */
 
