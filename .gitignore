@@ -1,3 +1,6 @@
+# Ignored dirs
+MDK-ARM/RTE/
+
 # Prerequisites
 *.d
 *.sct
