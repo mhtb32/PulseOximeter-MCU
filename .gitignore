@@ -1,5 +1,8 @@
 # Prerequisites
 *.d
+*.sct
+*.lst
+*.MHTB
 
 # Object files
 *.o
@@ -13,6 +16,9 @@
 *.map
 *.exp
 *.axf
+*.htm
+*.dep
+*.lnp
 
 # Precompiled Headers
 *.gch
