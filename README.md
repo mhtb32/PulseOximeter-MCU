@@ -3,7 +3,7 @@ This is microcontroller software of our pulse oximeter device being developed fo
 # What this code does?
 * Two phase shifted PWMs are generated as below:
 
-![Phase shifted PWM waves.](https://ufile.io/xamud)
+![Phase shifted PWM waves](https://image.ibb.co/hviDxk/pwm.jpg)
 # Contributers
 * [Mohammad Hossein Tavakoli Bina](https://github.com/mhtb32)
 * [Mohammad Ebrahimi](https://github.com/Ebik95) :bear:
