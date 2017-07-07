@@ -52,7 +52,7 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-__IO uint16_t uhADC1ConvertedValue[4000];
+__IO uint16_t uhADC1ConvertedValue[2];
 uint8_t UART_Buffer2[1] = ",";
 uint8_t UART_Buffer3[1] = "\n";
 /* USER CODE END PV */
@@ -106,7 +106,7 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
 	
-	if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)uhADC1ConvertedValue, 4000) != HAL_OK)
+	if(HAL_ADC_Start_DMA(&hadc1, (uint32_t *)uhADC1ConvertedValue, 2) != HAL_OK)
 	{
 		/* Start Conversation Error */
 		Error_Handler();
@@ -212,7 +212,7 @@ void send_number12(UART_HandleTypeDef* UARTx, uint16_t num_value, uint32_t timeo
 }
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
-	for(int i=0 ; i<4000 ; i++)
+	for(int i=0 ; i<2 ; i++)
 	{
 		send_number12(&huart4, uhADC1ConvertedValue[i], 250);
 		if(i%2 == 1)
