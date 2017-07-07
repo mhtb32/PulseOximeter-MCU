@@ -7,7 +7,7 @@ This is microcontroller software of our pulse oximeter device being developed fo
 	<img src="https://image.ibb.co/hviDxk/pwm.jpg">
 </p>
 
-2. ADC is triggered by a 200Hz timer in DMA mode and generates 2000 samples of each two channels.
+2. ADC is triggered by a 200Hz timer in DMA mode and generates samples continuously of each two channels.
 3. Samples are sent over UART to PC for further analysis.
 
 # Contributers
